@@ -1,7 +1,9 @@
+// Importar después de cargar las variables de entorno
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
 import http from 'http';
+import morgan from 'morgan';
 import { mongoDB, socketServer } from './config/index.js';
 
 // Configuración de variables de entorno
@@ -23,11 +25,11 @@ app.use(express.json());
 app.use(express.static("uploads"));
 
 // Conectar a MongoDB
-// mongoDB.connectMongoDB();
+await mongoDB.connectMongoDB();
 
 // Iniciar el servidor
 const PORT = process.env.PORT_SERVER || 3000;
 server.listen(PORT, () => {
-  console.log(`SERVER IN LISTENING: ${process.env.HOST_SERVER}:${PORT}`);
+  console.log(`*** Server in listening: ${process.env.HOST_SERVER}:${PORT} ***`);
   socketServer.getEventsSocket();
 });
