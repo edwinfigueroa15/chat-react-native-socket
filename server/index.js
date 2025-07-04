@@ -5,7 +5,7 @@ import express from 'express';
 import http from 'http';
 import morgan from 'morgan';
 import { mongoDB, socketServer } from './config/index.js';
-import { authRoute } from './routes/index.js';
+import * as routes from './routes/index.js';
 
 // Configuración de variables de entorno
 const envExtension = process.env.NODE_ENV || 'dev';
@@ -29,7 +29,8 @@ app.use(express.static("uploads"));
 await mongoDB.connectMongoDB();
 
 // Rutas
-app.use('/api/auth', authRoute);
+app.use('/api/auth', routes.authRoute);
+app.use('/api/user', routes.userRoute);
 
 // Iniciar el servidor
 const PORT = process.env.PORT_SERVER || 3000;

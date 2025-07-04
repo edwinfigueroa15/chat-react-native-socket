@@ -5,11 +5,11 @@ import { JwtUtil } from '../utils/index.js';
 const register = async (req, res) => {
     try {
         const { email, password } = req.body;
-        const user = await User.create({
+        const response = await User.create({
             email,
             password: bcryptjs.hashSync(password, bcryptjs.genSaltSync(10)),
         });
-        res.status(201).json({ message: 'Usuario registrado exitosamente', data: user, success: true });
+        res.status(201).json({ message: 'Usuario registrado exitosamente', data: response, success: true });
 
     } catch (error) {
         console.error(error);
@@ -27,7 +27,7 @@ const login = async (req, res) => {
         if (!isPasswordValid) return res.status(401).json({ message: 'Contraseña incorrecta', data: null, success: false });
 
         const payload = {
-            id: user._id,
+            _id: user._id,
             email: user.email,
             firstName: user.firstName,
             lastName: user.lastName,
@@ -50,7 +50,7 @@ const refreshAccessToken = async (req, res) => {
         if (!verifyToken) return res.status(401).json({ message: 'Token inválido', data: null, success: false });
 
         const payload = {
-            id: verifyToken.id,
+            _id: verifyToken._id,
             email: verifyToken.email,
             firstName: verifyToken.firstName,
             lastName: verifyToken.lastName,

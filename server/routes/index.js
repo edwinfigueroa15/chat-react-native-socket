@@ -1,3 +1,4 @@
 import authRoute from './auth.route.js';
+import userRoute from './user.route.js';
 
-export { authRoute };
+export { authRoute, userRoute };
