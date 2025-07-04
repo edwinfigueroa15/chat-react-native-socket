@@ -1,4 +1,4 @@
-import { JwtUtil } from '../utils/index.js';
+import { jwtUtil } from '../utils/index.js';
 
 const isAuthenticated = (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -8,7 +8,7 @@ const isAuthenticated = (req, res, next) => {
   if (!token) return res.status(401).json({ message: 'Acceso denegado. Formato de token inválido.', data: null, success: false });
 
   try {
-    const decoded = JwtUtil.verifyToken(token);
+    const decoded = jwtUtil.verifyToken(token);
     req.user = decoded;
     next();
   } catch (error) {

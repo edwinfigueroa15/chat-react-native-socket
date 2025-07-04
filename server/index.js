@@ -30,6 +30,7 @@ await mongoDB.connectMongoDB();
 
 // Rutas
 app.use('/api/auth', routes.authRoute);
+app.use('/api/chat', routes.chatRoute);
 app.use('/api/user', routes.userRoute);
 
 // Iniciar el servidor

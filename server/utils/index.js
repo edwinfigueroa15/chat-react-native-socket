@@ -1,3 +1,5 @@
-import * as JwtUtil from './jwt.util.js';
+import * as jwtUtil from './jwt.util.js';
 
-export { JwtUtil };
+export {
+    jwtUtil,
+};

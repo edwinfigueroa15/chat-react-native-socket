@@ -1,6 +1,6 @@
 import bcryptjs from 'bcryptjs';
 import { User } from '../models/index.js';
-import { JwtUtil } from '../utils/index.js';
+import { jwtUtil } from '../utils/index.js';
 
 const register = async (req, res) => {
     try {
@@ -33,8 +33,8 @@ const login = async (req, res) => {
             lastName: user.lastName,
             avatar: user.avatar,
         }
-        const accessToken = JwtUtil.generateToken(payload);
-        const refreshToken = JwtUtil.generateToken(payload, '30d');
+        const accessToken = jwtUtil.generateToken(payload);
+        const refreshToken = jwtUtil.generateToken(payload, '30d');
 
         res.status(200).json({ message: 'Inicio de sesión exitoso', data: { accessToken, refreshToken }, success: true });
     } catch (error) {
@@ -46,7 +46,7 @@ const login = async (req, res) => {
 const refreshAccessToken = async (req, res) => {
     try {
         const { refreshToken } = req.body;
-        const verifyToken = JwtUtil.verifyToken(refreshToken);
+        const verifyToken = jwtUtil.verifyToken(refreshToken);
         if (!verifyToken) return res.status(401).json({ message: 'Token inválido', data: null, success: false });
 
         const payload = {
@@ -56,7 +56,7 @@ const refreshAccessToken = async (req, res) => {
             lastName: verifyToken.lastName,
             avatar: verifyToken.avatar,
         }
-        const accessToken = JwtUtil.generateToken(payload);
+        const accessToken = jwtUtil.generateToken(payload);
 
         res.status(200).json({ message: 'Token renovado exitosamente', data: { accessToken, refreshToken }, success: true });
     } catch (error) {

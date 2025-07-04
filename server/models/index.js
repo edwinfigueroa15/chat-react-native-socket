@@ -1,3 +1,7 @@
+import { Chat } from './chat.model.js';
 import { User } from './user.model.js';
 
-export { User };
+export {
+    Chat,
+    User,
+};
