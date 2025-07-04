@@ -5,8 +5,9 @@ import fs from 'fs';
 // Configuración de Multer
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        if (!fs.existsSync('uploads')) fs.mkdirSync('uploads', { recursive: true });
-        cb(null, 'uploads/');
+        const uploadPath = req.uploadPath || 'uploads';
+        if (!fs.existsSync(uploadPath)) fs.mkdirSync(uploadPath, { recursive: true });
+        cb(null, uploadPath + '/');
     },
     filename: function (req, file, cb) {
         cb(null, Date.now() + path.extname(file.originalname));
