@@ -1,4 +1,5 @@
-import * as mongoDB from './mongo-db.js';
-import * as socketServer from './socket-server.js';
+import * as mongoDB from './mongo-db.config.js';
+import * as multerConfig from './multer.config.js';
+import * as socketServer from './socket-server.config.js';
 
-export { mongoDB, socketServer };
+export { mongoDB, multerConfig, socketServer };
