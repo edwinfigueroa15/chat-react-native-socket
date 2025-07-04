@@ -1,4 +1,6 @@
 import { User } from '../models/index.js';
+import { multerConfig } from '../config/index.js';
+import fs from 'fs';
 
 const getMe = async (req, res) => {
     try {
@@ -13,15 +15,34 @@ const getMe = async (req, res) => {
 }
 
 const updateMe = async (req, res) => {
-    // try {
-    //     const response = await User.findOneAndUpdate({ _id: req.user._id }, req.body, { new: true }).select(['-password']);
-    //     if (!response) return res.status(404).json({ message: 'Usuario no encontrado', data: null, success: false });
-    //     res.status(200).json({ message: 'Usuario actualizado exitosamente', data: response, success: true });
+    try {
+        const body = { ...req.body };
+        // Validar si el archivo llego y eliminar el avatar anterior
+        if (req.file) {
+            const currentUser = await User.findOne({ _id: req.user._id }).select(['avatar']);
+            if (currentUser?.avatar) {
+                try {
+                    fs.unlinkSync(currentUser.avatar);
+                } catch (error) {
+                    console.error('Error al eliminar avatar anterior:', error);
+                }
+            }
+            body.avatar = req.file.path;
+        }
 
-    // } catch (error) {
-    //     console.error(error);
-    //     res.status(500).json({ message: 'Error al actualizar el usuario', data: null, success: false });
-    // }
+        const response = await User.findOneAndUpdate(
+            { _id: req.user._id },
+            body,
+            { new: true, runValidators: true, context: 'query' }
+        ).select(['-password']);
+
+        if (!response) return res.status(404).json({ message: 'Usuario no encontrado', data: null, success: false });
+        res.status(200).json({ message: 'Usuario actualizado exitosamente', data: response, success: true });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al actualizar el usuario', data: null, success: false });
+    }
 }
 
 const getAll = async (req, res) => {

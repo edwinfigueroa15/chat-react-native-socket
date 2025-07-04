@@ -27,3 +27,8 @@ build/
 .env
 .env.dev
 .env.prod
+
+# Uploads
+uploads/
+uploads/*
+
