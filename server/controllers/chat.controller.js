@@ -1,4 +1,4 @@
-import { Chat } from '../models/index.js';
+import { Chat, ChatMessage } from '../models/index.js';
 
 const create = async (req, res) => {
     try {
@@ -36,9 +36,18 @@ const getAllByUser = async (req, res) => {
         .select(['-__v']);
         if (!response.length) return res.status(200).json({ message: 'No se encontraron chats', data: null, success: true });
 
-        // TODO: Obtener los mensajes de cada chat
+        const arrayChats = [];
+        for await(const chat of response) {
+            const lastMessage = await ChatMessage.findOne({ chat: chat._id })
+                .populate([
+                    { path: 'user', select: { __v: 0, password: 0 }, model: 'User' },
+                ])
+                .select(['-__v', '-chat'])
+                .sort({ createdAt: -1 });
+            arrayChats.push({ ...chat._doc, lastMessage });
+        }
 
-        res.status(201).json({ message: 'Chats encontrados exitosamente', data: response, success: true });
+        res.status(201).json({ message: 'Chats encontrados exitosamente', data: arrayChats, success: true });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Error al obtener los chats', data: null, success: false });

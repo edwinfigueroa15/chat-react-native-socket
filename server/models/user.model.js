@@ -9,6 +9,8 @@ const UserSchema = new mongoose.Schema({
     lastName: String,
     password: String,
     avatar: String,
+}, {
+    timestamps: true,
 });
 
 export const User = mongoose.model('User', UserSchema);
