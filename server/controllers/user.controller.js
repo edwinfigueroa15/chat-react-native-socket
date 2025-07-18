@@ -1,5 +1,4 @@
 import { User } from '../models/index.js';
-import { multerConfig } from '../config/index.js';
 import fs from 'fs';
 
 const getMe = async (req, res) => {
