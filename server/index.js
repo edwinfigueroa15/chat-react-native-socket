@@ -4,7 +4,8 @@ import dotenv from 'dotenv';
 import express from 'express';
 import http from 'http';
 import morgan from 'morgan';
-import { mongoDB, socketServer } from './config/index.js';
+import swaggerUi from 'swagger-ui-express';
+import { mongoDB, socketServer, swaggerSpecs } from './config/index.js';
 import * as routes from './routes/index.js';
 
 // Configuración de variables de entorno
@@ -29,6 +30,7 @@ app.use(express.static("uploads"));
 await mongoDB.connectMongoDB();
 
 // Rutas
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs, { explorer: true }));
 app.use('/api/auth', routes.authRoute);
 app.use('/api/chatMessage', routes.chatMessageRoute);
 app.use('/api/chat', routes.chatRoute);
