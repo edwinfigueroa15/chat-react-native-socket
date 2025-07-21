@@ -28,7 +28,19 @@ const getAll = async (req, res) => {
         ])
         .select(['-__v']);
         if (!response.length) return res.status(200).json({ message: 'No se encontraron grupos del usuario', data: null, success: true });
-        res.status(200).json({ message: 'Grupos encontrados exitosamente', data: response, success: true });
+        
+        const arrayGroups = [];
+        for await(const group of response) {
+            const lastMessage = await GroupMessage.findOne({ group: group._id })
+                .populate([
+                    { path: 'user', select: { __v: 0, password: 0 }, model: 'User' },
+                ])
+                .select(['-__v', '-group'])
+                .sort({ createdAt: -1 });
+            arrayGroups.push({ ...group._doc, lastMessage });
+        }
+        
+        res.status(200).json({ message: 'Grupos encontrados exitosamente', data: arrayGroups, success: true });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Error al obtener los grupos del usuario', data: null, success: false });

@@ -34,6 +34,7 @@ app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs, { explorer: 
 app.use('/api/auth', routes.authRoute);
 app.use('/api/chatMessage', routes.chatMessageRoute);
 app.use('/api/chat', routes.chatRoute);
+app.use('/api/groupMessage', routes.groupMessageRoute);
 app.use('/api/group', routes.groupRoute);
 app.use('/api/user', routes.userRoute);
 
